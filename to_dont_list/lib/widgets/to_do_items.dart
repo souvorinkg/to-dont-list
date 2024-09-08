@@ -41,8 +41,10 @@ class ToDoListItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
+      // Broken?
       onTap: () {
         onListChanged(item, completed);
+        // Button for adding a new item
       },
       onLongPress: completed
           ? () {

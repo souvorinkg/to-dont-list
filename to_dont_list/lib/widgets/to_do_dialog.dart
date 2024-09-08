@@ -33,22 +33,34 @@ class _ToDoDialogState extends State<ToDoDialog> {
         onChanged: (value) {
           setState(() {
             valueText = value;
+            print(valueText);
           });
         },
         controller: _inputController,
         decoration: const InputDecoration(hintText: "type something here"),
       ),
+      // there should be a button called "OKButton" that pops the dialog
       actions: <Widget>[
-        ElevatedButton(
-          key: const Key("OkButton"),
-          style: yesStyle,
-          child: const Text('OK'),
-          onPressed: () {
-            setState(() {
-              Navigator.pop(context);
-            });
+        ValueListenableBuilder<TextEditingValue>(
+          valueListenable: _inputController,
+          builder: (context, value, child) {
+            return ElevatedButton(
+              key: const Key("OKButton"),
+              style: yesStyle,
+              onPressed: value.text.isNotEmpty
+                ? () {
+                    setState(() {
+                      widget.onListAdded(_inputController.text, _inputController);  // Use _inputController.text directly
+                      Navigator.pop(context);
+                    });
+                  }
+                : null,
+                child: const Text('OK') // Disable the button if the text is empty
+            );
+            
           },
         ),
+
 
         // https://stackoverflow.com/questions/52468987/how-to-turn-disabled-button-into-enabled-button-depending-on-conditions
         ValueListenableBuilder<TextEditingValue>(
@@ -57,14 +69,9 @@ class _ToDoDialogState extends State<ToDoDialog> {
             return ElevatedButton(
               key: const Key("CancelButton"),
               style: noStyle,
-              onPressed: value.text.isNotEmpty
-                  ? () {
-                      setState(() {
-                        widget.onListAdded(valueText, _inputController);
-                        Navigator.pop(context);
-                      });
-                    }
-                  : null,
+              onPressed: () {
+                Navigator.pop(context);  // Close the dialog without any action
+              },
               child: const Text('Cancel'),
             );
           },
@@ -73,3 +80,5 @@ class _ToDoDialogState extends State<ToDoDialog> {
     );
   }
 }
+
+

@@ -77,8 +77,20 @@ void main() {
     await tester.pump();
     expect(find.text("hi"), findsOneWidget);
 
+
+    //await tester.pump();  // Triggers a rebuild
+
+    // breakpoint here, OKButton is not found
+    //print(find.byKey(const Key("OKButton")).evaluate().isNotEmpty);
+
     await tester.tap(find.byKey(const Key("OKButton")));
     await tester.pump();
+    print("Is there text?");
+    print(find.text("hi").evaluate().isNotEmpty);
+    print("Is there a ToDoListItem?");
+    print(find.byType(ToDoListItem).evaluate().length);
+    print("Is there a ToDoListItem?");
+    print(find.text("hi").toString());
     expect(find.text("hi"), findsOneWidget);
 
     final listItemFinder = find.byType(ToDoListItem);
